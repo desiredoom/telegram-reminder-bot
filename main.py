@@ -15,16 +15,33 @@ except Exception as e:
     print("❌ Failed to read Excel file:", e)
     exit(1)
 
+# Parse Due Date column
 df['Due Date'] = pd.to_datetime(df['Due Date'], format='%d/%m/%Y')
 
 # Use Gulf Standard Time (UTC+4)
-target_date = (datetime.datetime.utcnow() + datetime.timedelta(hours=4) + datetime.timedelta(days=2)).date()
+date_gulf = datetime.datetime.utcnow() + datetime.timedelta(hours=4)
+target_dates = [
+    (date_gulf + datetime.timedelta(days=1)).date(),  # Tomorrow
+    (date_gulf + datetime.timedelta(days=2)).date()   # Day after
+]
 
-matches = df[df['Due Date'].dt.date == target_date]
+# Filter for matching due dates
+matches = df[df['Due Date'].dt.date.isin(target_dates)]
 
+# Send Telegram messages
 for _, row in matches.iterrows():
+    due_date = row['Due Date'].date()
+    days_until_due = (due_date - date_gulf.date()).days
+
+    if days_until_due == 1:
+        label = "Due Tomorrow"
+    elif days_until_due == 2:
+        label = "Due Day After"
+    else:
+        label = f"Due in {days_until_due} days"
+
     message = (
-        f"📢 Rent Reminder:\n"
+        f"📢 Rent Reminder ({label}):\n"
         f"🏠 Property: {row['Property Name']}\n"
         f"📅 Due: {row['Due Date'].strftime('%d/%m/%Y')}\n"
         f"💰 Amount: AED {row['Installment Amount (AED)']}\n"
