@@ -49,5 +49,5 @@ cheque_schedule = pd.DataFrame(rows)
 cheque_schedule.sort_values(by="Due Date", inplace=True)
 
 # Export
-cheque_schedule.to_excel("final_upcoming_installments.xlsx", index=False)
-print("Report generated: final_upcoming_installments.xlsx")
+cheque_schedule.to_excel("upcoming_installments.xlsx", index=False)
+print("Report generated:upcoming_installments.xlsx")
