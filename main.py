@@ -6,13 +6,19 @@ import requests
 TELEGRAM_BOT_TOKEN = "7952306960:AAHOcm-KRkUdn0Kvrjf577Z0AzapllYD4NU"
 TELEGRAM_CHAT_ID = "894492883"
 
-# Read Excel from GitHub
+# Excel file from GitHub
 excel_url = "https://raw.githubusercontent.com/desiredoom/telegram-reminder-bot/main/upcoming_installments.xlsx"
-df = pd.read_excel(excel_url)
+
+try:
+    df = pd.read_excel(excel_url)
+except Exception as e:
+    print("❌ Failed to read Excel file:", e)
+    exit(1)
+
 df['Due Date'] = pd.to_datetime(df['Due Date'], format='%d/%m/%Y')
 
-# Calculate today's + 2
-target_date = datetime.date.today() + datetime.timedelta(days=2)
+# Use Gulf Standard Time (UTC+4)
+target_date = (datetime.datetime.utcnow() + datetime.timedelta(hours=4) + datetime.timedelta(days=2)).date()
 
 matches = df[df['Due Date'].dt.date == target_date]
 
@@ -26,4 +32,9 @@ for _, row in matches.iterrows():
     )
 
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
-    requests.get(url, params={"chat_id": TELEGRAM_CHAT_ID, "text": message})
+    response = requests.get(url, params={"chat_id": TELEGRAM_CHAT_ID, "text": message})
+
+    try:
+        response.raise_for_status()
+    except requests.exceptions.HTTPError as e:
+        print("❌ Telegram Error:", e.response.text)
