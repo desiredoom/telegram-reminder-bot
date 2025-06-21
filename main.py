@@ -7,7 +7,7 @@ TELEGRAM_BOT_TOKEN = "7952306960:AAHOcm-KRkUdn0Kvrjf577Z0AzapllYD4NU"
 TELEGRAM_CHAT_ID = "894492883"
 
 # Excel file from GitHub
-excel_url = "https://raw.githubusercontent.com/desiredoom/telegram-reminder-bot/main/upcoming_installments.xlsx"
+excel_url = "https://raw.githubusercontent.com/desiredoom/telegram-reminder-bot/main/Upcoming_Events.xlsx"
 
 try:
     df = pd.read_excel(excel_url)
