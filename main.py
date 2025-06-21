@@ -35,7 +35,7 @@ for _, row in matches.iterrows():
     days_until_due = (due_date - now_gulf.date()).days
     label = "Due Tomorrow" if days_until_due == 1 else "Due Day After"
 
-    reminder_type = str(row['Reminder Type']).strip().lower()
+    reminder_type = str(row['Event']).strip().lower()
     property_name = row.get('Property Name', 'Unknown Property')
     amount = row.get('Amount', '')
     comment = row.get('Comments', '')
@@ -80,7 +80,7 @@ for _, row in matches.iterrows():
             f"📅 Completion Date: {date_str}{comment_line}"
         )
 
-    elif reminder_type == "repair / inspection due":
+    elif reminder_type == "repair due":
         message = (
             f"📢 Repair / Inspection Due ({label}):\n"
             f"🏠 Property: {property_name}\n"
