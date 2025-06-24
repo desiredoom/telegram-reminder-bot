@@ -5,7 +5,7 @@ import requests
 
 # Settings
 TELEGRAM_BOT_TOKEN = "7952306960:AAHOcm-KRkUdn0Kvrjf577Z0AzapllYD4NU"
-TELEGRAM_CHAT_ID = "894492883"
+TELEGRAM_CHAT_ID = "1002806663723"
 LOG_FILE = "log.txt"
 
 # CSV file from GitHub
